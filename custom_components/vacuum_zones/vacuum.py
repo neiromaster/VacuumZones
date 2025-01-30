@@ -37,10 +37,10 @@ async def async_setup_platform(hass, _, async_add_entities, discovery_info=None)
         skip_returning = end_mode.lower() == "docked"
 
         if skip_returning:
-            if new_state.state not in (STATE_RETURNING, STATE_DOCKED):
+            if new_state.state != STATE_CLEANING or new_state.attributes.active_segments is not None:
                 return
         else:
-            if new_state.state != STATE_RETURNING or new_state.attributes.active_segments is not None:
+            if new_state.state not in (STATE_RETURNING, STATE_DOCKED):
                 return
 
         prev: ZoneVacuum = queue.pop(0)

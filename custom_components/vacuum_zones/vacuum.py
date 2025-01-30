@@ -33,7 +33,7 @@ async def async_setup_platform(hass, _, async_add_entities, discovery_info=None)
 
         new_state: State = event.data.get("new_state")
         current_vacuum: ZoneVacuum = queue[0]
-        end_mode: str = current_vacuum.service_data.get("end_mode", "")
+        end_mode: str = current_vacuum.end_mode
         skip_returning = end_mode.lower() == "docked"
 
         if new_state.state not in (STATE_DOCKED, *([] if skip_returning else [STATE_RETURNING])):
@@ -61,6 +61,7 @@ class ZoneVacuum(StateVacuumEntity):
 
     def __init__(self, name: str, config: dict, entity_id: str, queue: list):
         self._attr_name = config.pop("name", name)
+        self.end_mode = config.pop("end_mode", "")
         self.service_data: dict = config | {ATTR_ENTITY_ID: entity_id}
         self.queue = queue
 

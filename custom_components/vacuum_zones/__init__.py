@@ -20,6 +20,7 @@ CONFIG_SCHEMA = vol.Schema(
                             vol.Optional("zone"): list,
                             vol.Optional("repeats"): int,
                             vol.Optional("goto"): list,
+                            vol.Optional('end_mode'): vol.In(["docked", "returning"]),
                             vol.Optional(CONF_SEQUENCE): cv.SCRIPT_SCHEMA,
                         },
                         extra=vol.ALLOW_EXTRA,

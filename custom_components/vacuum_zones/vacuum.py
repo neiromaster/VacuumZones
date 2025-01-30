@@ -32,7 +32,11 @@ async def async_setup_platform(hass, _, async_add_entities, discovery_info=None)
             return
 
         new_state: State = event.data.get("new_state")
-        if new_state.state not in (STATE_RETURNING, STATE_DOCKED):
+        current_vacuum: ZoneVacuum = queue[0]
+        end_mode: str = current_vacuum.service_data.get("end_mode", "")
+        skip_returning = end_mode.lower() == "docked"
+
+        if new_state.state not in (STATE_DOCKED, *([] if skip_returning else [STATE_RETURNING])):
             return
 
         prev: ZoneVacuum = queue.pop(0)
